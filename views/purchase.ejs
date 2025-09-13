@@ -23,9 +23,9 @@
 			<% let pills = days*drugs[i].perDay; %>
 			<tr>
 				<td><%= i + 1 %></td>
-				<td><%= drugs[i].name %></td>
-				<td><%= Math.ceil(pills/drugs[i].card) %> (<%= drugs[i].pack/drugs[i].card %> <% if (drugs[i].pack/drugs[i].card < 2) { %> card <%} else { %> cards <% } %> per pack)</td>
-				<td><%= Math.ceil(pills/drugs[i].pack) %></td>
+				<td data-perday="<%= drugs[i].perDay %>"><%= drugs[i].name %></td>
+				<td data-card="<%= drugs[i].card %>"><%= Math.ceil(pills/drugs[i].card) %> (<%= drugs[i].pack/drugs[i].card %> <% if (drugs[i].pack/drugs[i].card < 2) { %> card <%} else { %> cards <% } %> per pack)</td>
+				<td data-pack="<%= drugs[i].pack %>"><%= Math.ceil(pills/drugs[i].pack) %></td>
 			</tr>
 			<% } %> <!--  End loop -->
 		</tbody>

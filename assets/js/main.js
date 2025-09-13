@@ -54,13 +54,34 @@ if(window.location.pathname == "/manage"){//since items are listed on manage
 }
 
 if(window.location.pathname == "/purchase"){
-//$("#purchase_table").hide();
+    // Get drugs data from table rows (rendered by EJS)
+    let drugs = [];
+    $("#purchase_table tbody tr").each(function() {
+        let $tds = $(this).find('td');
+        drugs.push({
+            id: $tds.eq(0).text(),
+            name: $tds.eq(1).text(),
+            card: parseInt($tds.eq(2).attr('data-card')),
+            pack: parseInt($tds.eq(3).attr('data-pack')),
+            perDay: parseInt($tds.eq(1).attr('data-perday'))
+        });
+    });
 
-$("#drug_days").submit(function(event){//on a submit event on the element with id add_drug
-    event.preventDefault();//prevent default submit behaviour
-    $("#purchase_table").show();
-    days = +$("#days").val();
-    alert("Drugs for " + days + " days!");//alert this in the browser
-})
+    function updatePurchaseTable(days) {
+        $("#purchase_table tbody tr").each(function(i) {
+            let drug = drugs[i];
+            let pills = days * drug.perDay;
+            let cardsToBuy = Math.ceil(pills / drug.card);
+            let packsToBuy = Math.ceil(pills / drug.pack);
+            $(this).find('td').eq(2).text(cardsToBuy + ' (' + (drug.pack/drug.card) + (drug.pack/drug.card < 2 ? ' card' : ' cards') + ' per pack)');
+            $(this).find('td').eq(3).text(packsToBuy);
+        });
+    }
 
+    $("#drug_days").submit(function(event){
+        event.preventDefault();
+        let days = +$("#days").val();
+        updatePurchaseTable(days);
+        $("#purchase_table").show();
+    });
 }
